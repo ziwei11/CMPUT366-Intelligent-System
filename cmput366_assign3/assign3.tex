@@ -1,0 +1,225 @@
+% -*- mode:LaTeX; mode:flyspell; -*-
+\documentclass{article}
+
+% Almost always
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{amsmath, amsthm}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage[verbose,letterpaper,top=1.25in,bottom=1in,left=1.25in,right=1.25in]{geometry}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\baselineskip}
+
+% extra stuff for assignments
+\newcounter{totalpoints}
+\setcounter{totalpoints}{0}
+
+\newcommand{\points}[1]{{\addtocounter{totalpoints}{#1}\textbf{[#1 points]}}}
+\usepackage{environ}
+\usepackage{etoolbox}
+\makeatletter
+\NewEnviron{answer}[1]
+{\ifx\BODY\@empty
+ \vspace{#1}%
+\else
+{\par\sf\color{blue} \BODY}%
+\fi}
+\makeatother
+
+\usepackage{totcount}
+\regtotcounter{totalpoints}
+\begin{document}
+
+{\bigskip\hrule\bigskip
+\huge
+\noindent CMPUT 366, Winter 2021\\
+Assignment \#3
+
+\large
+Due: Monday, March 29, 2021, 11:59pm\\
+Total points: \total{totalpoints}
+
+For this assignment use the following consultation model:
+\begin{enumerate}
+
+\item you can discuss assignment questions and exchange ideas with other \emph{current} CMPUT~366 students;
+
+\item you must list all members of the discussion in your solution;
+
+\item you may {\bf not} share/exchange/discuss written material and/or code;
+
+\item you must write up your solutions individually;
+
+\item you must fully understand and be able to explain your solution in any amount of detail as requested by the instructor and/or the TAs.
+
+\end{enumerate}
+
+Anything that you use in your work and that is not your own creation must be properly cited by listing the original source. Failing to cite others' work is plagiarism and will be dealt with as an academic offence.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bigskip\bigskip\hrule\bigskip
+
+\vspace{1cm}
+\hspace{1cm}{\bf First name:} \underline{\hspace{7cm}}
+
+\vspace{1cm}
+\hspace{1cm}{\bf Last name:} \underline{\hspace{7cm}}
+
+\vspace{1cm}
+\hspace{1cm}{\bf CCID:} \underline{\hspace{5.5cm}}\verb|@ualberta.ca|
+
+\vspace{1cm}
+\hspace{1cm}{\bf Collaborators:} \underline{\hspace{6.5cm}}
+
+\vspace{1cm}
+\bigskip\hrule\bigskip
+}
+
+\pagestyle{myheadings}
+\markboth{}{CMPUT 366 --- Assignment \#3}
+
+\begin{enumerate}
+
+%------------------------------------------------------------------------------------------
+\item \textbf{(Neural Networks)}
+The MNIST dataset is a set of images of handwritten digits labelled by their actual digit.
+We will operate on two versions of this dataset: one with the images shifted 2 pixels to the upper-left, and one with the images shifted 2 pixels to the bottom-right.
+
+This question requires the use of TensorFlow.  You may need to install Tensorflow using the following command:
+\begin{verbatim}
+    pip3 install tensorflow
+\end{verbatim}
+
+\begin{enumerate}
+\item\points{10}
+Implement a fully-connected feed-forward neural network for classifying MNIST images according to the digit that they represent by editing the \verb|mlp2| function in the provided \texttt{cnn.py} file.
+
+The network should have two hidden layers: one with 128 rectified linear (`relu') units, and one with 64 rectified linear units.  The output should be a fully-connected layer of 10 units with the softmax activation.  The \texttt{cnn.py} file contains an example implementation of a network with a single hidden layer in the \verb|mlp1| function that you may template from.  The \verb|main| function will test your program for you; you may add any tests that you like.
+It will also create a file called \texttt{examples.png} that contains examples images from the two test sets.
+
+The function should train the network using the training features \verb|train_x| and labels \verb|train_y|, and then evaluate the accuracy of the trained network on two different test sets: \verb|test1_x|, \verb|test1_y|, and \verb|test2_x|, \verb|test2_y|.
+This is demonstrated in \verb|mlp1|.
+
+We will run your code by importing the \verb|cnn| module and calling \verb|mlp2|, so it is important that your code follow these naming conventions.
+
+Submit all of your code for this question and question 1 (including provided boilerplate files) in a single zip file.
+
+\item\points{30}
+Implement a convolutional neural network for classifying MNIST images by editing the \verb|cnn| function in the provided \texttt{cnn.py} file.
+
+The network should have the following architecture:
+\begin{itemize}
+    \item A layer of 32 convolutional units with a kernel size of $5\times5$ and a stride of $1,1$.
+    \item A max-pooling layer with a pool size of $2\times2$ and a stride of $2,2$.
+    \item A layer of 64 convolutional units with a kernel size of $5\times5$ and the default stride.
+    \item A max-pooling layer with a pool size of $2\times2$ and the default stride.
+    \item A \verb|Flatten| layer (to reshape the image from a 2D matrix into a single long vector)
+    \item A layer of 512 fully-connected relu units
+    \item A layer of 10 fully-connected softmax units (the output layer)
+\end{itemize}
+
+Submit all of your code for this question and question 1 (including provided boilerplate files) in a single zip file.
+
+\item \points{2}
+What was the accuracy of your trained 2-hidden-layer feedforward network on the two test sets?
+\begin{answer}{2\baselineskip}
+% Put your answer here
+\end{answer}
+
+\item \points{2}
+What was the accuracy of your trained convolutional neural network on the two test sets?
+\begin{answer}{2\baselineskip}
+% Put your answer here
+\end{answer}
+
+\item \points{10}
+Did one of your implementations perform substantially better on one of the test sets than the other implementation did?
+If so, why?  If not, why not?
+\begin{answer}{1.5in}
+% Put your answer here
+\end{answer}
+
+
+\end{enumerate}
+
+\clearpage
+%------------------------------------------------------------------------------------------
+\item \textbf{(Bayesian Learning)}
+
+Suppose that you have three models ($\theta_1,\theta_2,\theta_3$) of changes in the price of a single stock.
+You know that one of these models is the true model.  Each model gives the probability that tomorrow's price will be higher than today's price ($y_{t+1}$), based on whether today's price was higher than the price the day before ($y_t$).  So you can make money on average by buying the stock when $p(y_{t+1} \mid y_t, \theta^*) > .5$ and selling when $p(y_{t+1} \mid y_t, \theta^*) < .5$, where $\theta^*$ is the true model.
+
+Your prior belief is that $\theta_1$ and $\theta_2$ are equally likely to be true, and $\theta_3$ is three times more likely than $\theta_1$ to be true.
+
+You have a dataset $D$ of past observations, and you have computed that
+\begin{align*}
+    p(D \mid \theta_1) &= .00084 \\
+    p(D \mid \theta_2) &= .00105 \\
+    p(D \mid \theta_3) &= .00007.
+\end{align*}
+
+\item \points{6}
+What are the posterior probabilities of each model being the true model?
+\begin{answer}{1.5in}
+% Put your answer here
+\end{answer}
+
+\item \points{4}
+Now suppose that you have run each model, and they make the following predictions:
+\begin{align*}
+    p(y_{t+1} \mid y_t, \theta_1) &= .75 \\
+    p(y_{t+1} \mid y_t, \theta_2) &= .4 \\
+    p(y_{t+1} \mid y_t, \theta_3) &= .6.
+\end{align*}
+
+What is the maximum a posterior estimate for $p(y_{t+1} \mid y_t)$?
+Based on the MAP estimate, would you be better off buying or selling?
+
+\begin{answer}{1.5in}
+% Put your answer here
+\end{answer}
+
+\item \points{4}
+
+What is the estimate according to the posterior predictive distribution for $p(y_{t+1} \mid y_t)$?
+(I.e., using model averaging.)
+Based on the PPD, would you be better off buying or selling?
+
+\begin{answer}{1.5in}
+% Put your answer here
+\end{answer}
+
+%------------------------------------------------------------------------------------------
+\end{enumerate}
+
+%------------------------------------------------------------------------------------------
+\section*{Submission}
+The assignment you downloaded from eClass is a single ZIP archive which includes this document as a PDF {\em and} its \LaTeX{} source as well as Python files needed for the coding questions.
+%
+You are to unzip the archive into an empty directory, work on the problems and then zip the directory into a new single ZIP archive for submission.
+
+\medskip
+
+Each assignment is to be submitted electronically via eClass by the due date.
+\textbf{Your submission must be a single ZIP file containing}: 
+\begin{enumerate}
+    \item a single PDF file with your answers;
+    \item file(s) with your Python code.
+\end{enumerate}
+
+To generate the PDF file with your answers you can do any of the following:
+
+\begin{itemize}
+    \item
+    insert your answers into the provided \LaTeX{} source file between \verb|\begin{answer}| and \verb|\end{answer}|. Then run the source through \LaTeX{} to produce a PDF file;
+
+    \item print out the provided PDF file and {\bf\it legibly} write your answers in the blank spaces under each question. Make sure you write as legibly as possible for we cannot give you any points if we cannot read your hand-writing. Then scan the pages and include the scan in your ZIP submission to be uploaded on eClass;
+
+    \item use your favourite text processor and type up your answers there. Make sure you number your answers in the same way as the questions are numbered in this assignment.
+\end{itemize}
+%\bibliography{gtdt}
+%\bibliographystyle{apalike}
+\end{document}
