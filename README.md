@@ -1,5 +1,5 @@
 # CMPUT366-Intelligent-System
-Introduction to artificial intelligence focusing on techniques for building intelligent software systems and agents. Topics include search and problem-solving techniques, knowledge representation and reasoning, reasoning and acting under uncertainty, and machine learning (including neural networks). Recent applications such as planning and scheduling, diagnosis, decision support systems, and data mining.
+Introduction to artificial intelligence focusing on techniques for building intelligent software systems and agents. Topics include search and problem-solving techniques, knowledge representation and reasoning, reasoning and acting under uncertainty, and machine learning (including neural networks). 
 
 Assignment1: Uninformed search, Heuristic search, Local search
 
